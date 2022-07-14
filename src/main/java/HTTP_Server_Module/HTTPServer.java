@@ -1,15 +1,14 @@
 package HTTP_Server_Module;
 
+import HTTP_Server_Module.HTTP_Response_Headers.*;
+import HTTP_Server_Module.HTTP_Response_Module.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import javax.swing.text.html.HTML;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.stream.Collectors;
 
 public class HTTPServer {
     private ServerSocket serverSocket;
@@ -33,19 +32,20 @@ public class HTTPServer {
                         break;
                     }
                 }
+
                 File input = new File("src/main/java/HTTP_Server_Module/TestFile.html");
                 Document doc = Jsoup.parse(input,"UTF-8",""); // this works
                 System.out.println(inputLines);
-                    String response = "";
+
+                HTTPResponse test_response = new HTTPResponse(new HTTPStatusLine(StoredStatusCode.OK),doc.toString(),
+                        new DateHeader(),
+                        new ServerNameHeader("Firestorm"),
+                        new ContentTypeHeader(HeaderContentType.HTML),
+                        new ContentLengthHeader(input));
 
 
 
-                response = "HTTP/1.1 200 OK\r\n" +
-                                "Date: " + new Date() + "\r\n" +
-                                "Server: FireStorm\r\n" +
-                                "Content-Type: text/html\r\n" +
-                                "Content-Length:" + input.length()+ "\r\n" +
-                                "\r\n" + doc.toString();
+               String response = test_response.getAsString();
 
 
                     out.println(response);
