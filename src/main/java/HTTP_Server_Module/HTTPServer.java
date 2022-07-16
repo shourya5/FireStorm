@@ -17,8 +17,8 @@ public class HTTPServer {
 
     static int port  = 8080;
 
-    public static void main(String[] args) {
-        try (ServerSocket serverSocket = new ServerSocket(port);) {
+    public void serverStart(int server_port) {
+        try (ServerSocket serverSocket = new ServerSocket(server_port);) {
             serverSocket.setReuseAddress(true);
             ExecutorService threadPool = Executors.newFixedThreadPool(10);
             while (true) {
@@ -29,6 +29,11 @@ public class HTTPServer {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) {
+        HTTPServer server = new HTTPServer();
+        server.serverStart(port);
     }
 
 
