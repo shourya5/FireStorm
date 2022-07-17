@@ -6,7 +6,7 @@ import HTTP_Server_Module.HTTP_General_Interfaces.HTTPHeader;
 
 public abstract   class HTTPHeaderResponse implements HTTPHeader {
 
-    private String response_label;
+    private final String response_label;
     private HTTPHeaderResponseType response_type = null;
      private String content = "";
 

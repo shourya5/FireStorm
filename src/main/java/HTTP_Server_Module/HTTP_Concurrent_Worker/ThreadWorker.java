@@ -7,6 +7,7 @@ import HTTP_Server_Module.HTTP_Response_Module.StoredStatusCode;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import javax.swing.text.html.HTMLDocument;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,8 +15,10 @@ import java.util.ArrayList;
 
 public class ThreadWorker  implements Runnable {
     private final Socket clientsocket;
-    public ThreadWorker(Socket clientsocket) {
+    private final Document htmlDocument;
+    public ThreadWorker(Socket clientsocket, Document htmlDocument) {
         this.clientsocket = clientsocket;
+        this.htmlDocument = htmlDocument;
     }
     /**
      * When an object implementing interface {@code Runnable} is used
@@ -37,22 +40,24 @@ public class ThreadWorker  implements Runnable {
 
         ) {
             String inputLine;
+            ArrayList<String> inputLines = new ArrayList<>();
             while ((inputLine = clientin.readLine()) != null) {
-                //inputLines.add(inputLine);
+                inputLines.add(inputLine);
                 if (inputLine.isEmpty()) {
                     break;
                 }
             }
-            File input = new File("src/main/java/HTTP_Server_Module/TestFile.html");
-            Document doc = Jsoup.parse(input,"UTF-8",""); // this works
+            //File input = new File("src/main/java/HTTP_Server_Module/TestFile.html");
+            ; // this works
             HTTPResponse test_response = new HTTPResponse(
                     new HTTPStatusLine(StoredStatusCode.OK),
-                    doc.toString(),
+                    htmlDocument.toString(),
                     new DateHeader(),
-                    new ServerNameHeader("Firestorm"),
+                    new ServerNameHeader("FireStorm"),
                     new ContentTypeHeader(HeaderContentType.HTML),
-                    new ContentLengthHeader(input));
+                    new ContentLengthHeader(htmlDocument));
             clientout.print(test_response.getAsString());
+            System.out.println(inputLines);
 
         } catch (IOException e) {
             throw new RuntimeException(e);

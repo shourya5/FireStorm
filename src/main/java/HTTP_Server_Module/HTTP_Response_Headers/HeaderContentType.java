@@ -10,7 +10,7 @@ public enum HeaderContentType {
     GIF("image/gif"),
     BINARY("application/octet-stream");
 
-    private String contentType;
+    private final String contentType;
 
     HeaderContentType(String contentType) {
         this.contentType = contentType;

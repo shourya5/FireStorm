@@ -3,8 +3,8 @@ package HTTP_Server_Module.HTTP_Response_Headers;
 
 
 public class ContentTypeHeader extends HTTPHeaderResponse {
-    private static String content_type_label = "Content-Type: ";
-    private String content_type_value = "";
+    private static final String content_type_label = "Content-Type: ";
+    private final String content_type_value = "";
 
     private HeaderContentType content_type;
 

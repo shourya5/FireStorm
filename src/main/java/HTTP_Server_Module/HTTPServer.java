@@ -17,13 +17,14 @@ public class HTTPServer {
 
     static int port  = 8080;
 
-    public void serverStart(int server_port) {
+    public void startServer(int server_port) {
         try (ServerSocket serverSocket = new ServerSocket(server_port);) {
             serverSocket.setReuseAddress(true);
+            Document htmlDocument = Jsoup.parse(new File("src/main/java/HTTP_Server_Module/TestFile.html"), "UTF-8");
             ExecutorService threadPool = Executors.newFixedThreadPool(10);
-            while (true) {
+            while (true) {///infinite loop to finish all processes
                 Socket clientSocket = serverSocket.accept();
-                threadPool.execute(new ThreadWorker(clientSocket));
+                threadPool.execute(new ThreadWorker(clientSocket, htmlDocument));
 
             }
         } catch (IOException e) {
@@ -33,7 +34,7 @@ public class HTTPServer {
 
     public static void main(String[] args) {
         HTTPServer server = new HTTPServer();
-        server.serverStart(port);
+        server.startServer(port);
     }
 
 
