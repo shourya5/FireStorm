@@ -14,13 +14,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HTTPServer {
+    static String default_port = "8080";
+    static String default_root = "src/main/java/HTTP_Server_Module/TestFile.html";
 
-    static int port  = 8080;
 
-    public void startServer(int server_port) {
-        try (ServerSocket serverSocket = new ServerSocket(server_port);) {
+    static int port = Integer.parseInt(System.getenv().getOrDefault("PORT", default_port));
+    static String path = System.getenv().getOrDefault("PATH", default_root);
+    //Checks for the PORT environment variable, if it doesn't exist, it defaults to 8080
+
+    public void startServer(int server_port,String path) {
+        try (ServerSocket serverSocket = new ServerSocket(server_port)) {
             serverSocket.setReuseAddress(true);
-            Document htmlDocument = Jsoup.parse(new File("src/main/java/HTTP_Server_Module/TestFile.html"), "UTF-8");
+            Document htmlDocument = Jsoup.parse(new File(path), "UTF-8");
             ExecutorService threadPool = Executors.newFixedThreadPool(10);
             while (true) {///infinite loop to finish all processes
                 Socket clientSocket = serverSocket.accept();
@@ -32,9 +37,9 @@ public class HTTPServer {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
         HTTPServer server = new HTTPServer();
-        server.startServer(port);
+        server.startServer(port, path);
     }
 
 
